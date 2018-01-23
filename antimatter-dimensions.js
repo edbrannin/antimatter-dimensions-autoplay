@@ -1,8 +1,21 @@
+clearInterval(interval);
 interval = setInterval((state) => {
+  soft_resets = true;
+  galaxy_resets = false;
   maxAll = () => {
     console.log('Max all');
-    $('#maxall').click();
+    if (true) {
+      $('#maxall').click();
+    } else {
+      // Going for the "no 8d" achievement
+      ['tickSpeedMax', 'firstMax', 'secondMax', 'thirdMax', 'fourthMax', 'fifthMax', 'sixthMax', 'seventhMax'].forEach((id) => {
+        selector = `#${id}.storebtn`;
+        $(selector).click();
+      });
+    }
   };
+  // Reset, if possible
+  $('#bigcrunch').click();
   maxAll();
   sac_text = $('#sacrifice').text().match(/\(([0-9]+.*)x\)/)[1];
   sac = Number(sac_text);
@@ -18,10 +31,15 @@ interval = setInterval((state) => {
       console.log("Increasing too fast:", sac - state.last_sac, "since last tick");
     }
   }
-  if ($('#softReset.storebtn').text() ===  "Reset the game for a new Dimension") {
+  state.last_sac = sac
+  if ($('#softReset.storebtn').text() === 'Reset the game for a new Dimension' || $('#confirmation').css('display') ===  'none') {
     $('#softReset.storebtn').click();
     setTimeout(maxAll, 100);
+  } else if (soft_resets) {
+    if (galaxy_resets) {
+      $('#secondSoftReset.storebtn').click();
+    }
+    $('#softReset.storebtn').click();
   }
   // TODO Also reset if #confirmation isn't present
 }, 500, {});
-
